@@ -13,8 +13,8 @@ async function getBankSlipOr404(id) {
 
 async function createBankSlip(req, res, next) {
 	const { due_date, total_in_cents, customer } = req.body;
-	if (!due_date || !total_in_cents || !customer) {
-		const err = new Error('Bank slip not provided in the request body');
+	if (!due_date || !total_in_cents || !customer || typeof due_date !== 'string' || typeof total_in_cents !== 'number' || typeof customer !== 'string') {
+		const err = new Error('Invalid parameters provided in the request body');
 		err.status = 422;
 		return next(err);
 	}
@@ -88,8 +88,8 @@ async function payBankSlip(req, res, next) {
 		const { id } = req.params;
 		const { payment_date } = req.body;
 
-		if (!payment_date) {
-			const err = new Error('Payment date not provided in the request body');
+		if (!payment_date || typeof payment_date !== 'string') {
+			const err = new Error('Invalid parameters provided in the request body');
 			err.status = 422;
 			return next(err);
 		}
